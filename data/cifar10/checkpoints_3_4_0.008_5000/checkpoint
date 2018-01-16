@@ -1,0 +1,2 @@
+model_checkpoint_path: "/home/ardelaxela/Research/projects/NeuralNetworks/data/cifar10/checkpoints_3_4_0.008_5000/"
+all_model_checkpoint_paths: "/home/ardelaxela/Research/projects/NeuralNetworks/data/cifar10/checkpoints_3_4_0.008_5000/"

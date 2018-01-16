@@ -1,0 +1,2 @@
+model_checkpoint_path: "/home/ardelaxela/Research/projects/NeuralNetworks/data/mnist/checkpoints_3_4_0.01_200/"
+all_model_checkpoint_paths: "/home/ardelaxela/Research/projects/NeuralNetworks/data/mnist/checkpoints_3_4_0.01_200/"
