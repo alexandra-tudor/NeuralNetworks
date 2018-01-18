@@ -1,10 +1,10 @@
 import numpy as np
 import tensorflow as tf
-import cv2
+# import cv2
 import os
 import cifar10
 from cifar10 import img_size, num_channels, num_classes
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix
 
 # To stop potential randomness
