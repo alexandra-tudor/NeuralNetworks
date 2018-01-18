@@ -33,7 +33,7 @@ def test_adversial_images(y_pred, saver, save_dir, x, keep_prob, phase_train, im
             image_ex2 = image_list[i].reshape(img_shape)
 
             result += [(pred_list[i], pct_list[i], image_ex2)]
-
+        session.close()
     return result
 
 
@@ -111,6 +111,8 @@ def create_plot_adversarial_images(x, keep_prob, phase_train, x_image, img_shape
         for x in x_images:
             plt.imsave(images_dir + "/" + str(i) + ".png", x, cmap='binary')
             i += 1
+
+        return x_images
 
 
 def batch_norm(x, phase_train):
@@ -612,7 +614,7 @@ def run_experiment(params, dropout, bn):
     chosen_class = np.zeros(10)
     chosen_class[params['chosen_label']] = 1
     image_index = np.random.randint(len(chosen)-1)
-    create_plot_adversarial_images(x=placeholders['x'],
+    x_image_list = create_plot_adversarial_images(x=placeholders['x'],
                                    keep_prob=placeholders['fc_layer1_keep_prob'],
                                    phase_train=placeholders['phase_train'],
                                    img_shape=(params['img_size'], params['img_size'], params['num_channels']),
@@ -665,8 +667,12 @@ def run_experiment(params, dropout, bn):
     else:
         gray = False
     image_list, img_shape = read_images(params['plot_dir'] + str(chosen_label) + "_" + str(real_label) + "/", gray)
-    result1 = test_adversial_images(y_pred, saver, params['save_dir'], placeholders['x'], placeholders['fc_layer1_keep_prob'], placeholders['phase_train'], image_list, img_shape)
-    result2 = test_adversial_images(y_pred2, saver, params['save_dir2'], placeholders2['x'], placeholders2['fc_layer1_keep_prob'], placeholders2['phase_train'], image_list, img_shape)
+    xx_image_list = []
+    for img in x_image_list:
+        img = img.flatten().reshape(784)
+        xx_image_list += [img]
+    result1 = test_adversial_images(y_pred, saver, params['save_dir'], placeholders['x'], placeholders['fc_layer1_keep_prob'], placeholders['phase_train'], xx_image_list, img_shape)
+    result2 = test_adversial_images(y_pred2, saver, params['save_dir2'], placeholders2['x'], placeholders2['fc_layer1_keep_prob'], placeholders2['phase_train'], xx_image_list, img_shape)
 
     fig = plt.figure(figsize=(25, 35))
     plt.clf()
@@ -689,7 +695,7 @@ def run_experiment(params, dropout, bn):
 
 
 if __name__ == "__main__":
-    datasets = [('mnist', 28, 1, 2000, 30, 1e-2, 50), ('cifar10', 32, 3, 5000, 100, 8e-3, 100)]
+    datasets = [('mnist', 28, 1, 1000, 30, 1e-2, 50), ('cifar10', 32, 3, 1000, 100, 8e-3, 100)]
     base_dir = os.getcwd() + "/data/"
     if not os.path.exists(base_dir):
         os.makedirs(base_dir)
@@ -737,8 +743,8 @@ if __name__ == "__main__":
         test_batch_size = 1000
         dropout = 0.5
 
-        real_label = 2
-        chosen_label = 4
+        real_label = 6
+        chosen_label = 5
 
         data = load_data(data_dir, dataset)
         print(data.test.labels[:5])

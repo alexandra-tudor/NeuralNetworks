@@ -13,11 +13,11 @@ class parameters():
         self.DATA_FILE = 'data/shakespeare.txt'
         self.CKPT_DIR = 'char_RNN_ckpt_dir'
         self.encoding = 'utf-8'
-        self.SAMPLE_EVERY = 10 # save model every epoch
+        self.SAMPLE_EVERY = 10  # save model every epoch
         self.TRAIN_RATIO = 0.8
         self.VALID_RATIO = 0.1
 
-        self.NUM_EPOCHS = 100
+        self.NUM_EPOCHS = 10
         self.BATCH_SIZE = 1000
         self.SEQ_LEN = 20
         self.MODEL = 'rnn'
@@ -31,8 +31,8 @@ class parameters():
 
         self.SAMPLE_LEN = 500
         self.SEED_TOKENS = "Thou "
-        self.SAMPLE_EVERY = 10 # general sample every epoch
-        self.SAMPLE_TYPE = 1 # 0=argmax, 1=temperature based
+        self.SAMPLE_EVERY = 1  # general sample every epoch
+        self.SAMPLE_TYPE = 0  # 0=argmax, 1=temperature based
         self.TEMPERATURE = 0.04
 
 
@@ -47,7 +47,7 @@ def generate_data(FLAGS):
     FLAGS.NUM_CLASSES = len(chars)
     FLAGS.char_to_idx = char_to_idx
     FLAGS.idx_to_char = idx_to_char
-    print("\nTotal %i characters with %i unique tokens.".format(FLAGS.DATA_SIZE, FLAGS.NUM_CLASSES))
+    print("\nTotal {0} characters with {1} unique tokens.".format(FLAGS.DATA_SIZE, FLAGS.NUM_CLASSES))
 
     X = [FLAGS.char_to_idx[char] for char in data]
     y = X[1:]
@@ -324,8 +324,8 @@ def train(FLAGS):
             model.saver.save(sess, checkpoint_path,
                 global_step=model.global_step)
 
-            # if epoch_num%FLAGS.SAMPLE_EVERY == 0:
-            #     os.system('python char_rnn.py sample')
+            if epoch_num%FLAGS.SAMPLE_EVERY == 0:
+                os.system('python char_rnn.py sample')
 
 
 def sample(FLAGS):
